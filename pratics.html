@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>filter</title>
+</head>
+<body>
+	<script type="text/javascript">
+		let ages = [10,20,30,5,16];
+		let adult = ages.filter(function(age){
+			return age>=18;
+		});
+		adult.forEach(function(age,i){
+			console.log(`This person is adult == ${age}`);
+		})
+	</script>
+</body>
+</html>
