@@ -36,6 +36,7 @@ const account4 = {
 };
 
 const accounts = [account1, account2, account3, account4];
+
 // Elements
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
@@ -95,6 +96,14 @@ const creatUserName = function(accs){
 };
 creatUserName(accounts);
 
+const calcDisplayBalance = function(mov){
+  const balance = mov.reduce(function(acc,curr){
+    return acc+curr;
+  });
+  labelBalance.textContent = `${balance} €`
+}
+calcDisplayBalance(movements);
+
 const calcDisplaySummary = function(acc){
   //////////Usinng chainng method in normal function///////////
     const incomes = acc.filter(mov=>mov>0).reduce((acc,mov)=>acc + mov , 0);
@@ -112,7 +121,7 @@ const calcDisplaySummary = function(acc){
     const interest = acc.filter(mov => mov > 0)
     .map(deposit => (Math.round(deposit * 1.1) / 100))
     .filter((int, i, arr) => {
-       console.log(arr);
+      //  console.log(arr);
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
@@ -121,8 +130,11 @@ const calcDisplaySummary = function(acc){
 calcDisplaySummary(movements);
 
 
-const displayTotalDeposite = movements.filter(mov=>mov>0).reduce((acc,mov)=>acc + mov,0);
-console.log(`Total deposite is ${displayTotalDeposite}`);
+////// EVENT LISTNER ////
+btnLogin.addEventListener('click',function(e){
+  e.preventDefault();
+    currentAcc
+});
 
 
 //console.log(creatUserName('Steven Thomas Williams'));
@@ -140,13 +152,6 @@ const currencies = new Map([
 
 
 // console.log(movements);
-const balance = movements.reduce(function(acc,curr){
-        return acc+curr;
-});
-labelBalance.textContent = `${balance} EUR`
-console.log(balance);
 
-const eurtoUsd = 1.1;
-const totalDepositeUsd = movements.filter(mov=> mov>0).map(mov=>mov * eurtoUsd).reduce((acc,mov)=> Math.round(acc + mov , 0));
-console.log(totalDepositeUsd);
+
 /////////////////////////////////////////////////
