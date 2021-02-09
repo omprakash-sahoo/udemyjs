@@ -85,12 +85,12 @@ const displayMovements = function (movements) {
   });
 };
 
-displayMovements(account1.movements);
+
 
 const creatUserName = function(accs){
   accs.forEach(function(acc){
     acc.username = acc.owner.toLowerCase().split(' ').map(function(name){
-      return name[0]; 
+      return name[0];
     }).join('');
   });
 };
@@ -102,23 +102,23 @@ const calcDisplayBalance = function(mov){
   });
   labelBalance.textContent = `${balance} €`
 }
-calcDisplayBalance(movements);
+
 
 const calcDisplaySummary = function(acc){
   //////////Usinng chainng method in normal function///////////
-    const incomes = acc.filter(mov=>mov>0).reduce((acc,mov)=>acc + mov , 0);
+    const incomes = acc.movements.filter(mov=>mov>0).reduce((acc,mov)=>acc + mov , 0);
     labelSumIn.textContent = `${incomes}€`;
 
     //////////Usinng chainng method in Arrow function///////////
 
-    const out = acc.filter(function(mov){
+    const out = acc.movements.filter(function(mov){
       return mov<0;
     }).reduce(function(acc,mov){
       return acc + mov;
     },0);
     labelSumOut.textContent = `${Math.abs(out)}€`; 
 
-    const interest = acc.filter(mov => mov > 0)
+    const interest = acc.movements.filter(mov => mov > 0)
     .map(deposit => (Math.round(deposit * 1.1) / 100))
     .filter((int, i, arr) => {
       //  console.log(arr);
@@ -127,13 +127,32 @@ const calcDisplaySummary = function(acc){
     .reduce((acc, int) => acc + int, 0);
   labelSumInterest.textContent = `${interest}€`;
 }
-calcDisplaySummary(movements);
+
 
 
 ////// EVENT LISTNER ////
+let currentAcc;
 btnLogin.addEventListener('click',function(e){
   e.preventDefault();
-    currentAcc
+    currentAcc = accounts.find(function(acc){
+      return acc.username === inputLoginUsername.value;
+    });
+    console.log(currentAcc);
+    // if(currentAcc && currentAcc.pin === Number(inputLoginPin.value)){
+      if(currentAcc?.pin === Number(inputLoginPin.value)){
+        //Clear Input Field
+        inputLoginUsername.value = inputLoginPin.value = '';
+        inputLoginPin.blur();
+     //Display UI & Welcome message
+        labelWelcome.textContent = `welcom back, ${currentAcc.owner.split(" ")[0]}`;
+        containerApp.style.opacity = 100;
+        //Display Movements
+        displayMovements(currentAcc.movements);
+     //Dsplay balance
+     calcDisplayBalance(currentAcc.movements);
+     //Display Summary
+     calcDisplaySummary(currentAcc);
+    }
 });
 
 
